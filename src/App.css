@@ -216,8 +216,8 @@ body {
   transition: opacity 0.5s, fill 0.5s;
 }
 
-.map-dot.dot-base { opacity: 0.06; }
-.map-dot.dot-past { opacity: 0.2; }
+.map-dot.dot-base { opacity: 0.15; }
+.map-dot.dot-past { opacity: 0.25; }
 .map-dot.dot-current { opacity: 0.9; }
 
 /* Animating dots start dim until animation kicks in */
