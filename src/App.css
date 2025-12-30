@@ -899,18 +899,20 @@ body {
    ============================================ */
 
 @media (max-width: 768px) {
-  /* Header - compact on mobile */
+  /* Header - compact single line on mobile */
   .header {
-    padding: 12px 16px;
-    gap: 10px;
+    padding: 10px 12px;
+    gap: 8px;
+    flex-wrap: nowrap;
   }
 
   .header-left {
-    gap: 15px;
+    gap: 10px;
+    flex-shrink: 0;
   }
 
   .name {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   /* Hide clocks on mobile */
@@ -918,13 +920,15 @@ body {
     display: none;
   }
 
-  /* Social links - smaller gaps */
+  /* Social links - tight spacing */
   .header-right {
-    gap: 12px;
+    gap: 8px;
+    flex-shrink: 1;
+    flex-wrap: nowrap;
   }
 
   .social-link {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
 
   /* Map container - less top padding since header is smaller */
