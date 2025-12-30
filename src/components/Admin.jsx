@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase, fetchPins, updateAllPins, signIn, signOut, getSession } from '../lib/supabase'
+import { supabase, fetchPins, updateAllPins, signIn, signOut } from '../lib/supabase'
 
 function Admin() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -14,34 +14,22 @@ function Admin() {
   const [saved, setSaved] = useState(false)
   const navigate = useNavigate()
 
-  // Check for existing session and load pins
+  // Handle auth state changes (includes initial session check)
   useEffect(() => {
-    async function init() {
-      try {
-        const session = await getSession()
-        if (session) {
-          setIsLoggedIn(true)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session) {
+        setIsLoggedIn(true)
+        try {
           const pinsData = await fetchPins()
           if (pinsData) setPins(pinsData)
+        } catch (err) {
+          console.error('Failed to fetch pins:', err)
         }
-      } catch (err) {
-        console.error('Auth init error:', err)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    init()
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session) {
-        setIsLoggedIn(true)
-        const pinsData = await fetchPins()
-        if (pinsData) setPins(pinsData)
-      } else if (event === 'SIGNED_OUT') {
+      } else {
         setIsLoggedIn(false)
         setPins([])
       }
+      setIsLoading(false)
     })
 
     return () => subscription.unsubscribe()
