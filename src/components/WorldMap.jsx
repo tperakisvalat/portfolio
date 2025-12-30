@@ -84,8 +84,12 @@ function WorldMap() {
   // Fetch pins data from Supabase on mount and when window regains focus
   useEffect(() => {
     const loadPins = async () => {
-      const pins = await fetchPins()
-      if (pins) setExplorePinsData(pins)
+      try {
+        const pins = await fetchPins()
+        if (pins) setExplorePinsData(pins)
+      } catch (err) {
+        console.error('Failed to fetch pins:', err)
+      }
     }
 
     loadPins()

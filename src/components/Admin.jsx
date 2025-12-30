@@ -17,13 +17,18 @@ function Admin() {
   // Check for existing session and load pins
   useEffect(() => {
     async function init() {
-      const session = await getSession()
-      if (session) {
-        setIsLoggedIn(true)
-        const pinsData = await fetchPins()
-        if (pinsData) setPins(pinsData)
+      try {
+        const session = await getSession()
+        if (session) {
+          setIsLoggedIn(true)
+          const pinsData = await fetchPins()
+          if (pinsData) setPins(pinsData)
+        }
+      } catch (err) {
+        console.error('Auth init error:', err)
+      } finally {
+        setIsLoading(false)
       }
-      setIsLoading(false)
     }
     init()
 
