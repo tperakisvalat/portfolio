@@ -77,9 +77,30 @@ function WorldMap() {
   const [displayedText, setDisplayedText] = useState('')
   const [selectedPin, setSelectedPin] = useState(null)
   const [explorePinsData, setExplorePinsData] = useState([])
+  const [isPlaying, setIsPlaying] = useState(false)
   const containerRef = useRef(null)
   const timerRef = useRef(null)
   const typewriterRef = useRef(null)
+  const audioRef = useRef(null)
+
+  // Stop audio when modal closes
+  useEffect(() => {
+    if (!selectedPin && audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+      setIsPlaying(false)
+    }
+  }, [selectedPin])
+
+  const togglePlay = () => {
+    if (!audioRef.current) return
+    if (isPlaying) {
+      audioRef.current.pause()
+    } else {
+      audioRef.current.play()
+    }
+    setIsPlaying(!isPlaying)
+  }
 
   // Fetch pins data from Supabase on mount and when window regains focus
   useEffect(() => {
@@ -381,18 +402,30 @@ function WorldMap() {
                 </section>
               </div>
 
-              {selectedPin.music && (
+              {selectedPin.music && selectedPin.music.title && (
                 <div className="pin-music-player">
+                  {selectedPin.music.url && (
+                    <audio
+                      ref={audioRef}
+                      src={selectedPin.music.url}
+                      onEnded={() => setIsPlaying(false)}
+                    />
+                  )}
                   <div className="music-cover">
-                    <div className="music-cover-placeholder">♫</div>
+                    <div className={`music-cover-placeholder ${isPlaying ? 'playing' : ''}`}>♫</div>
                   </div>
                   <div className="music-info">
                     <span className="music-title">{selectedPin.music.title}</span>
                     <span className="music-artist">{selectedPin.music.artist}</span>
                   </div>
                   <div className="music-controls">
-                    <button className="music-btn">▶</button>
-                    <button className="music-btn">🔊</button>
+                    {selectedPin.music.url ? (
+                      <button className="music-btn" onClick={togglePlay}>
+                        {isPlaying ? '⏸' : '▶'}
+                      </button>
+                    ) : (
+                      <button className="music-btn" disabled style={{ opacity: 0.3 }}>▶</button>
+                    )}
                   </div>
                 </div>
               )}

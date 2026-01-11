@@ -309,6 +309,13 @@ function Admin() {
                     onChange={(e) => updatePinField(currentPin.id, 'music', { ...currentPin.music, artist: e.target.value })}
                   />
                 </div>
+                <input
+                  type="text"
+                  placeholder="Audio URL (from Supabase Storage)"
+                  value={currentPin.music?.url || ''}
+                  onChange={(e) => updatePinField(currentPin.id, 'music', { ...currentPin.music, url: e.target.value })}
+                  style={{ marginTop: '10px' }}
+                />
               </div>
             </div>
           ) : (

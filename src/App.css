@@ -441,6 +441,16 @@ body {
   justify-content: center;
   font-size: 1.2rem;
   color: var(--color-neon-green);
+  transition: transform 0.3s;
+}
+
+.music-cover-placeholder.playing {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .music-info {
