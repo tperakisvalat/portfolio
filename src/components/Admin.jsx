@@ -14,25 +14,48 @@ function Admin() {
   const [saved, setSaved] = useState(false)
   const navigate = useNavigate()
 
-  // Handle auth state changes (includes initial session check)
+  // Check session on mount and listen for auth changes
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session) {
-        setIsLoggedIn(true)
-        try {
+    let isMounted = true
+
+    // Manually check session on mount (more reliable than waiting for onAuthStateChange)
+    const checkSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!isMounted) return
+
+        if (session) {
+          setIsLoggedIn(true)
           const pinsData = await fetchPins()
-          if (pinsData) setPins(pinsData)
-        } catch (err) {
-          console.error('Failed to fetch pins:', err)
+          if (pinsData && isMounted) setPins(pinsData)
         }
-      } else {
+      } catch (err) {
+        console.error('Session check error:', err)
+      } finally {
+        if (isMounted) setIsLoading(false)
+      }
+    }
+
+    checkSession()
+
+    // Also listen for auth changes (for login/logout)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!isMounted) return
+
+      if (event === 'SIGNED_IN' && session) {
+        setIsLoggedIn(true)
+        const pinsData = await fetchPins()
+        if (pinsData && isMounted) setPins(pinsData)
+      } else if (event === 'SIGNED_OUT') {
         setIsLoggedIn(false)
         setPins([])
       }
-      setIsLoading(false)
     })
 
-    return () => subscription.unsubscribe()
+    return () => {
+      isMounted = false
+      subscription.unsubscribe()
+    }
   }, [])
 
   const handleLogin = async (e) => {

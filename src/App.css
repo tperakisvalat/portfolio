@@ -693,6 +693,13 @@ body {
   min-height: 100vh;
   background: var(--color-bg);
   padding: 30px;
+  overflow-y: auto;
+}
+
+/* Allow scrolling on admin pages */
+body:has(.admin-panel),
+body:has(.admin-login) {
+  overflow: auto;
 }
 
 .admin-header {
