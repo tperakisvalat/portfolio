@@ -303,6 +303,13 @@ function Admin() {
                   onChange={(e) => updatePinField(currentPin.id, 'music', { ...currentPin.music, url: e.target.value })}
                   style={{ marginTop: '10px' }}
                 />
+                <input
+                  type="text"
+                  placeholder="Cover Image URL (from Supabase Storage)"
+                  value={currentPin.music?.cover || ''}
+                  onChange={(e) => updatePinField(currentPin.id, 'music', { ...currentPin.music, cover: e.target.value })}
+                  style={{ marginTop: '10px' }}
+                />
               </div>
             </div>
           ) : (

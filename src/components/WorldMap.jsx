@@ -412,7 +412,15 @@ function WorldMap() {
                     />
                   )}
                   <div className="music-cover">
-                    <div className={`music-cover-placeholder ${isPlaying ? 'playing' : ''}`}>♫</div>
+                    {selectedPin.music.cover ? (
+                      <img
+                        src={selectedPin.music.cover}
+                        alt="Album cover"
+                        className={`music-cover-img ${isPlaying ? 'playing' : ''}`}
+                      />
+                    ) : (
+                      <div className={`music-cover-placeholder ${isPlaying ? 'playing' : ''}`}>♫</div>
+                    )}
                   </div>
                   <div className="music-info">
                     <span className="music-title">{selectedPin.music.title}</span>
