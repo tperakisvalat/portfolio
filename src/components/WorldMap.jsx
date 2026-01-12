@@ -83,9 +83,21 @@ function WorldMap() {
   const typewriterRef = useRef(null)
   const audioRef = useRef(null)
 
-  // Stop audio when modal closes
+  // Auto-play when modal opens, stop when it closes
   useEffect(() => {
-    if (!selectedPin && audioRef.current) {
+    if (selectedPin && selectedPin.music?.url && audioRef.current) {
+      // Small delay to ensure audio element is ready
+      setTimeout(() => {
+        if (audioRef.current) {
+          audioRef.current.play().then(() => {
+            setIsPlaying(true)
+          }).catch(() => {
+            // Autoplay blocked by browser, user will need to click play
+            setIsPlaying(false)
+          })
+        }
+      }, 100)
+    } else if (!selectedPin && audioRef.current) {
       audioRef.current.pause()
       audioRef.current.currentTime = 0
       setIsPlaying(false)
@@ -416,10 +428,10 @@ function WorldMap() {
                       <img
                         src={selectedPin.music.cover}
                         alt="Album cover"
-                        className={`music-cover-img ${isPlaying ? 'playing' : ''}`}
+                        className="music-cover-img"
                       />
                     ) : (
-                      <div className={`music-cover-placeholder ${isPlaying ? 'playing' : ''}`}>♫</div>
+                      <div className="music-cover-placeholder">♫</div>
                     )}
                   </div>
                   <div className="music-info">
