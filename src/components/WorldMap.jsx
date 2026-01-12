@@ -361,15 +361,6 @@ function WorldMap() {
                   <p className="pin-intro">{parseLinks(selectedPin.intro)}</p>
                 </section>
 
-                <section className="pin-section">
-                  <h3 className="pin-section-title">questions i have</h3>
-                  <ul className="pin-list">
-                    {selectedPin.questions?.map((q, i) => (
-                      <li key={i}>{q}</li>
-                    ))}
-                  </ul>
-                </section>
-
                 {selectedPin.writing?.length > 0 && (
                   <section className="pin-section">
                     <h3 className="pin-section-title">writing & projects</h3>
@@ -382,6 +373,15 @@ function WorldMap() {
                     </ul>
                   </section>
                 )}
+
+                <section className="pin-section">
+                  <h3 className="pin-section-title">questions i have</h3>
+                  <ul className="pin-list questions">
+                    {selectedPin.questions?.map((q, i) => (
+                      <li key={i}>{q}</li>
+                    ))}
+                  </ul>
+                </section>
 
                 <section className="pin-section">
                   <h3 className="pin-section-title">things i've read</h3>
