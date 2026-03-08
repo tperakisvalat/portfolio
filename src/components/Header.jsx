@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 const CLOCKS = [
   { label: 'PARIS', timezone: 'Europe/Paris' },
@@ -6,8 +7,10 @@ const CLOCKS = [
   { label: 'SHANGHAI', timezone: 'Asia/Shanghai' },
 ]
 
-const SOCIAL_LINKS = [
+const NAV_LINKS = [
+  { label: 'news', to: '/news', internal: true },
   { label: '2026', url: 'https://docs.google.com/document/d/1tBCX9dw0gRl5RnJ1Jujtj04mgdBiQqJe89Dr-OsTynU/edit?tab=t.0' },
+  { label: 'updates', url: 'https://docs.google.com/document/d/1w6CIFAsuYbnXb_Xj_Mvr4cKZcjGndOvN9j_9TREBDgo/edit?usp=sharing' },
   { label: 'substack', url: 'https://substack.com/@timpv' },
   { label: 'linkedin', url: 'https://www.linkedin.com/in/timothee-perakis/' },
   { label: 'x', url: 'https://x.com/tperakisvalat' },
@@ -46,16 +49,26 @@ function Header() {
       </div>
 
       <div className="header-right">
-        {SOCIAL_LINKS.map(link => (
-          <a
-            key={link.label}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-link"
-          >
-            {link.label}
-          </a>
+        {NAV_LINKS.map(link => (
+          link.internal ? (
+            <Link
+              key={link.label}
+              to={link.to}
+              className="social-link"
+            >
+              {link.label}
+            </Link>
+          ) : (
+            <a
+              key={link.label}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-link"
+            >
+              {link.label}
+            </a>
+          )
         ))}
       </div>
     </header>
