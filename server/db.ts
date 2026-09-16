@@ -9,10 +9,12 @@ export interface Database {
   transaction<T>(fn: (db: Database) => Promise<T>): Promise<T>
   close(): Promise<void>
 }
-export async function openDatabase(url = process.env.DATABASE_URL, localPath = '.local/news-db'): Promise<Database> {
+export async function openDatabase(url = process.env.DATABASE_URL, localPath = '.local/news-db', limits: { connectSeconds?: number; statementMillis?: number; closeSeconds?: number } = {}): Promise<Database> {
   if (url) {
     const client = postgres(url, {
-      max: 5, prepare: false, connection: { application_name: 'tpv-news' },
+      max: 5, prepare: false,
+      ...(limits.connectSeconds === undefined ? {} : { connect_timeout: limits.connectSeconds }),
+      connection: { application_name: 'tpv-news', ...(limits.statementMillis === undefined ? {} : { statement_timeout: limits.statementMillis }) },
       types: {
         json: {
           to: 114, from: [114, 3802],
@@ -26,7 +28,7 @@ export async function openDatabase(url = process.env.DATABASE_URL, localPath = '
       query: async (query, params = []) => Array.from(await sql.unsafe(query, params)),
       exec: async query => { await sql.unsafe(query) },
       transaction: fn => sql.begin((tx: any) => fn(wrap(tx))),
-      close: () => client.end(),
+      close: () => client.end(limits.closeSeconds === undefined ? undefined : { timeout: limits.closeSeconds }),
     })
     return wrap(client)
   }

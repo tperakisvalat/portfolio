@@ -1,0 +1,14 @@
+FROM node:24-bookworm-slim
+WORKDIR /app
+COPY package.json package-lock.json ./
+# tsx runs the TypeScript service and is currently a development dependency.
+RUN npm ci --include=dev
+ENV NODE_ENV=production
+COPY server ./server
+COPY shared ./shared
+COPY supabase/migrations ./supabase/migrations
+# Explicit public artifacts: never COPY the private editorial notes or .env files.
+COPY docs/news/editor.example.md docs/news/sources.json docs/news/starter-sources.json docs/news/pricing.example.json ./docs/news/
+USER node
+EXPOSE 8080
+CMD ["node", "--import", "tsx", "server/railway.ts", "serve"]

@@ -19,3 +19,4 @@
 !docs/news/*.md
 !docs/news/*.json
 !Dockerfile.news
+!Dockerfile.railway-api
