@@ -1,5 +1,8 @@
 {
   "rewrites": [
+    { "source": "/news/brief.txt", "destination": "/api/news-proxy?newsPath=brief.txt" },
+    { "source": "/api/news/:path*", "destination": "/api/news-proxy?newsPath=:path*" },
     { "source": "/(.*)", "destination": "/" }
-  ]
+  ],
+  "functions": { "api/news-proxy.ts": { "maxDuration": 30 } }
 }

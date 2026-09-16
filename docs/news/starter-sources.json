@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-09-07",
+  "note": "Feed metadata is discovery only, not article evidence. arXiv abstracts are descriptive metadata under CC0. The search tool researches leads independently and preserves citations. No publisher full text is silently scraped.",
+  "sources": [
+    {"id":"al-jazeera-english","enabled":true,"processing":"metadata"},
+    {"id":"rest-of-world","enabled":true,"processing":"metadata"},
+    {"id":"techcabal","enabled":true,"processing":"metadata"},
+    {"id":"chinatalk","enabled":true,"processing":"metadata"},
+    {"id":"chartbook","enabled":true,"processing":"metadata"},
+    {"id":"noahpinion","enabled":true,"processing":"metadata"},
+    {"id":"anticipating-the-unintended","enabled":true,"processing":"metadata"},
+    {"id":"pekingnology","enabled":true,"processing":"metadata"},
+    {"id":"construction-physics","enabled":true,"processing":"metadata"},
+    {"id":"works-in-progress","enabled":true,"processing":"metadata"},
+    {"id":"one-useful-thing","enabled":true,"processing":"metadata"},
+    {"id":"interconnects","enabled":true,"processing":"metadata"},
+    {"id":"african-arguments","enabled":true,"processing":"metadata"},
+    {"id":"eprs","enabled":false,"processing":"metadata"},
+    {"id":"federal-reserve","enabled":true,"processing":"metadata"},
+    {"id":"bis","enabled":true,"processing":"metadata"},
+    {"id":"arxiv","adapter":"feed","endpoint":"https://export.arxiv.org/api/query?search_query=cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CL&sortBy=submittedDate&sortOrder=descending&max_results=40","enabled":false,"processing":"feed-text","cadenceMinutes":1440,"rightsUrl":"https://info.arxiv.org/help/api/tou.html","rightsNote":"Descriptive metadata, including abstracts, is CC0. Only the API abstract is stored; no paper PDF/full text is mirrored. One connection at a time, at least three seconds apart. API returned 429 during launch check; disabled pending a later successful check. Do not bypass rate limits."},
+    {"id":"our-world-in-data","name":"Our World in Data","family":"research","recommendation":"start","homepage":"https://ourworldindata.org/","endpoint":"https://ourworldindata.org/atom.xml","adapter":"feed","pillars":["macro","politics","business","tech"],"enabled":true,"processing":"metadata","rightsNote":"OWID-authored text is CC BY; underlying third-party datasets can differ. Start with discovery metadata, follow original article and dataset licenses.","rightsUrl":"https://ourworldindata.org/faqs","cadenceMinutes":720}
+  ]
+}

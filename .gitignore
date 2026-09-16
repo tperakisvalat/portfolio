@@ -20,3 +20,27 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
+
+# Local editorial runtime, evidence, database and recovery snapshots
+.local/
+.checkpoints/
+tmp/
+*.backup
+*.backup.gz
+*.storage.zip
+server-dist/
+
+# Hosting links and local database tooling
+.vercel/
+supabase/.temp/
+
+# Local instructions, personal planning documents and unrelated artifacts
+/AGENTS.md
+/output/
+/outputs/
+/docs/news/*
+!/docs/news/editor.example.md
+!/docs/news/sources.json
+!/docs/news/starter-sources.json
+!/docs/news/pricing.example.json
+!/docs/news/DEPLOYMENT.md

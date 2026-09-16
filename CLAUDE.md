@@ -70,7 +70,7 @@ The map reveals progressively as you scroll:
 - Clears on scroll to next section
 
 ### Admin Panel (/admin)
-- Login: username `tpv2002`, password `Kalanda1`
+- Authentication uses the configured Supabase account. Never store login credentials in this document or in source control.
 - Edit all 4 region pins (Shanghai, Paris, NYC, SF)
 - Add/remove questions, writing, books
 - Supports markdown-style links: `[text](url)`

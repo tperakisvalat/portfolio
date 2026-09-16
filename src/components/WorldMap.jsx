@@ -1,39 +1,16 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import DottedMap from 'dotted-map'
 import { fetchPins } from '../lib/supabase'
+import PinPage from './PinPage'
+import useReducedMotion from '../lib/useReducedMotion'
 
-// Configuration
-const ANIMATION_DURATION = 2400
-const COUNTRY_DELAY = 0.6 // seconds between country animations
-const DOT_ANIMATION = 1.2 // seconds for dot glow animation
-const TYPEWRITER_SPEED = 25 // ms per character
-
-// Parse markdown-style links: [text](url)
-function parseLinks(text) {
-  if (!text) return text
-  const regex = /\[([^\]]+)\]\(([^)]+)\)/g
-  const parts = []
-  let lastIndex = 0
-  let match
-
-  while ((match = regex.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push(text.slice(lastIndex, match.index))
-    }
-    parts.push(
-      <a key={match.index} href={match[2]} target="_blank" rel="noopener noreferrer">
-        {match[1]}
-      </a>
-    )
-    lastIndex = regex.lastIndex
-  }
-
-  if (lastIndex < text.length) {
-    parts.push(text.slice(lastIndex))
-  }
-
-  return parts.length > 0 ? parts : text
-}
+// Each gesture advances one complete scene. Explicit route stops remain available.
+const ANIMATION_DURATION = 1700
+const COUNTRY_DELAY = 0.3
+const DOT_ANIMATION = 0.85
+const TYPEWRITER_SPEED = 16
+const ROUTE_STOPS = ['start', 'madrid', 'origins', 'grew up', 'today', 'map']
+let lastSection = 0
 
 const WORLD_REGION = {
   lat: { min: -60, max: 85 },
@@ -70,57 +47,59 @@ const VISITED_COUNTRIES = [
 
 const STORY_COUNTRIES = ['ESP', 'FRA', 'GRC', 'DEU', 'CHN', 'USA']
 
+function StoryTerminal({ text, visible, reducedMotion }) {
+  const [displayedText, setDisplayedText] = useState('')
+  useEffect(() => {
+    if (!visible || reducedMotion) return
+    let index = 0
+    const letters = Array.from(text)
+    const timer = setInterval(() => {
+      index += 1
+      setDisplayedText(letters.slice(0, index).join(''))
+      if (index >= letters.length) clearInterval(timer)
+    }, TYPEWRITER_SPEED)
+    return () => clearInterval(timer)
+  }, [text, visible, reducedMotion])
+  return <div className="terminal-box" style={{ visibility: visible ? 'visible' : 'hidden' }}>
+    <span className="terminal-prompt">&gt;</span>
+    <span className="terminal-text" aria-label={text}><span aria-hidden="true">{reducedMotion ? text : displayedText}<span className="terminal-cursor" /></span></span>
+  </div>
+}
+
 function WorldMap() {
-  const [currentSection, setCurrentSection] = useState(0)
+  const [currentSection, setCurrentSection] = useState(() => lastSection)
   const [animationPhase, setAnimationPhase] = useState('done')
   const [animationKey, setAnimationKey] = useState(0)
-  const [displayedText, setDisplayedText] = useState('')
   const [selectedPin, setSelectedPin] = useState(null)
   const [explorePinsData, setExplorePinsData] = useState([])
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [hoveredPin, setHoveredPin] = useState(null)
+  const [pinsStatus, setPinsStatus] = useState('loading')
+  const reducedMotion = useReducedMotion()
   const containerRef = useRef(null)
   const timerRef = useRef(null)
-  const typewriterRef = useRef(null)
-  const audioRef = useRef(null)
+  const sectionRef = useRef(currentSection)
+  const lockUntilRef = useRef(0)
+  const closePin = useCallback(() => setSelectedPin(null), [])
 
-  // Auto-play when modal opens, stop when it closes
-  useEffect(() => {
-    if (selectedPin && selectedPin.music?.url && audioRef.current) {
-      // Small delay to ensure audio element is ready
-      setTimeout(() => {
-        if (audioRef.current) {
-          audioRef.current.play().then(() => {
-            setIsPlaying(true)
-          }).catch(() => {
-            // Autoplay blocked by browser, user will need to click play
-            setIsPlaying(false)
-          })
-        }
-      }, 100)
-    } else if (!selectedPin && audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current.currentTime = 0
-      setIsPlaying(false)
-    }
-  }, [selectedPin])
-
-  const togglePlay = () => {
-    if (!audioRef.current) return
-    if (isPlaying) {
-      audioRef.current.pause()
-    } else {
-      audioRef.current.play()
-    }
-    setIsPlaying(!isPlaying)
-  }
+  const goTo = useCallback(index => {
+    const next = Math.max(0, Math.min(STORY_SECTIONS.length - 1, index))
+    if (next === sectionRef.current) return
+    sectionRef.current = next
+    lastSection = next
+    lockUntilRef.current = performance.now() + (reducedMotion || STORY_SECTIONS[next].isSimple ? 350 : ANIMATION_DURATION)
+    setHoveredPin(null)
+    setCurrentSection(next)
+  }, [reducedMotion])
 
   // Fetch pins data from Supabase on mount and when window regains focus
   useEffect(() => {
     const loadPins = async () => {
       try {
         const pins = await fetchPins()
-        if (pins) setExplorePinsData(pins)
+        if (pins) { setExplorePinsData(pins); setPinsStatus(pins.length ? 'ready' : 'empty') }
+        else setPinsStatus('error')
       } catch (err) {
+        setPinsStatus('error')
         console.error('Failed to fetch pins:', err)
       }
     }
@@ -192,58 +171,69 @@ function WorldMap() {
   const isExplore = currentSection === STORY_SECTIONS.length - 1
   const isStart = currentSection === 0
 
-  // Handle section change - trigger animation and clear text
   useEffect(() => {
     clearTimeout(timerRef.current)
-    clearInterval(typewriterRef.current)
-    setDisplayedText('') // Clear text immediately on section change
-    setSelectedPin(null) // Close any open modal
-
-    if (!story.isSimple && story.countries.length > 0) {
+    setAnimationKey(key => key + 1)
+    if (!story.isSimple && !reducedMotion) {
+      lockUntilRef.current = performance.now() + ANIMATION_DURATION
       setAnimationPhase('animating')
-      setAnimationKey(k => k + 1)
       timerRef.current = setTimeout(() => setAnimationPhase('done'), ANIMATION_DURATION)
     } else {
+      lockUntilRef.current = 0
       setAnimationPhase('done')
     }
     return () => {
       clearTimeout(timerRef.current)
-      clearInterval(typewriterRef.current)
     }
-  }, [currentSection, story.isSimple, story.countries.length])
+  }, [currentSection, story, reducedMotion])
 
-  // Typewriter effect - runs when animation is done
-  useEffect(() => {
-    if (animationPhase === 'done' && !story.isSimple && story.text) {
-      const text = story.text
-      let index = 0
-      setDisplayedText('')
-
-      typewriterRef.current = setInterval(() => {
-        index++
-        setDisplayedText(text.slice(0, index))
-        if (index >= text.length) {
-          clearInterval(typewriterRef.current)
-        }
-      }, TYPEWRITER_SPEED)
-    }
-    return () => clearInterval(typewriterRef.current)
-  }, [animationPhase, story.isSimple, story.text])
-
-  // Handle scroll
   useEffect(() => {
     const container = containerRef.current
-    if (!container) return
-
-    const onScroll = () => {
-      const progress = container.scrollTop / (container.scrollHeight - container.clientHeight)
-      const section = Math.min(Math.floor(progress * STORY_SECTIONS.length), STORY_SECTIONS.length - 1)
-      if (section !== currentSection) setCurrentSection(section)
+    if (!container || selectedPin) return
+    let lastWheel = 0
+    let total = 0
+    let consumed = false
+    let touchStart = null
+    const step = direction => {
+      if (performance.now() < lockUntilRef.current) return
+      goTo(sectionRef.current + direction)
     }
-
-    container.addEventListener('scroll', onScroll)
-    return () => container.removeEventListener('scroll', onScroll)
-  }, [currentSection])
+    const onWheel = event => {
+      if (event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return
+      event.preventDefault()
+      const now = performance.now()
+      if (now - lastWheel > 200) { total = 0; consumed = false }
+      lastWheel = now
+      if (consumed) return
+      if (now < lockUntilRef.current) { consumed = true; return }
+      total += event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? container.clientHeight : 1)
+      if (Math.abs(total) > 45) { step(Math.sign(total)); consumed = true }
+    }
+    const onTouchStart = event => { touchStart = event.touches.length === 1 ? event.touches[0].clientY : null }
+    const onTouchEnd = event => {
+      if (touchStart == null || !event.changedTouches.length) return
+      const distance = touchStart - event.changedTouches[0].clientY
+      if (Math.abs(distance) > 45) step(Math.sign(distance))
+      touchStart = null
+    }
+    const onKey = event => {
+      if (event.defaultPrevented || event.target.closest?.('button, a, input, textarea, select, [role="button"]') || event.repeat) return
+      if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); step(1) }
+      if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); step(-1) }
+      if (event.key === 'End') { event.preventDefault(); goTo(STORY_SECTIONS.length - 1) }
+      if (event.key === 'Home') { event.preventDefault(); goTo(0) }
+    }
+    container.addEventListener('wheel', onWheel, { passive: false })
+    container.addEventListener('touchstart', onTouchStart, { passive: true })
+    container.addEventListener('touchend', onTouchEnd, { passive: true })
+    window.addEventListener('keydown', onKey)
+    return () => {
+      container.removeEventListener('wheel', onWheel)
+      container.removeEventListener('touchstart', onTouchStart)
+      container.removeEventListener('touchend', onTouchEnd)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [goTo, selectedPin])
 
   // Compute past countries/pins (from previous sections)
   const past = useMemo(() => {
@@ -283,16 +273,12 @@ function WorldMap() {
   const showTerminal = !story.isSimple
 
   return (
-    <div className="scroll-container" ref={containerRef}>
-      <div className="scroll-content">
-        {STORY_SECTIONS.map((_, i) => <div key={i} className="scroll-section" />)}
-      </div>
-
-      <div className="map-fixed-container">
+    <div className="scroll-container story-stage" ref={containerRef}>
+      <div className="map-fixed-container" inert={!!selectedPin}>
         <div className="top-content">
           {story.isSimple && (
             <div className={`simple-text ${isExplore ? 'explore-mode' : ''}`}>
-              {isStart ? 'scroll' : story.text}
+              {isStart ? 'a map of me' : hoveredPin?.title || ''}
             </div>
           )}
           {!story.isSimple && story.cityLabel && (
@@ -301,7 +287,7 @@ function WorldMap() {
         </div>
 
         <div className="map-wrapper">
-          <svg viewBox={`0 0 ${mapData.width} ${mapData.height}`} className={`dotted-map ${isExplore ? 'explore-mode' : ''}`} key={animationKey}>
+          <svg viewBox={`0 0 ${mapData.width} ${mapData.height}`} className={`dotted-map ${isExplore ? 'explore-mode' : ''}`} key={animationKey} role="group" aria-label={isExplore ? 'Explore places and ideas' : story.cityLabel || 'World map — my story'}>
             {/* Map dots */}
             {mapData.dots.map((p, i) => {
               const state = getDotState(p.country)
@@ -348,9 +334,15 @@ function WorldMap() {
               )
             })}
 
-            {/* Explore mode: Green neon pins */}
+            {/* Large invisible targets keep the small dots easy to hit. */}
             {isExplore && mapData.explorePins.map(pin => (
-              <g key={`explore-${pin.name}`} className="explore-pin-group" onClick={() => setSelectedPin(pin)}>
+              <g key={`explore-${pin.name}`} className={`explore-pin-group ${hoveredPin?.id === pin.id ? 'is-hovered' : ''}`}
+                role="button" tabIndex={0} aria-label={`Open ${pin.title}, ${pin.name}`}
+                onMouseEnter={() => setHoveredPin(pin)} onMouseLeave={() => setHoveredPin(null)}
+                onFocus={() => setHoveredPin(pin)} onBlur={() => setHoveredPin(null)}
+                onClick={() => setSelectedPin(pin)}
+                onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelectedPin(pin) } }}>
+                <circle cx={pin.x} cy={pin.y} r={2.4} className="explore-pin-target" />
                 <circle cx={pin.x} cy={pin.y} r={1.2} className="explore-pin-glow" />
                 <circle cx={pin.x} cy={pin.y} r={0.5} className="explore-pin" />
               </g>
@@ -358,118 +350,38 @@ function WorldMap() {
           </svg>
         </div>
 
-        {/* Pin detail modal - full page */}
-        {selectedPin && (
-          <div className="pin-modal-overlay">
-            <div className="pin-modal-full" onClick={e => e.stopPropagation()}>
-              <button className="pin-modal-back" onClick={() => setSelectedPin(null)}>
-                ← back
-              </button>
-
-              <div className="pin-modal-content">
-                <h1 className="pin-modal-title">{selectedPin.title}</h1>
-
-                <section className="pin-section">
-                  <p className="pin-intro">{parseLinks(selectedPin.intro)}</p>
-                </section>
-
-                {selectedPin.writing?.length > 0 && (
-                  <section className="pin-section">
-                    <h3 className="pin-section-title">writing & projects</h3>
-                    <ul className="pin-list">
-                      {selectedPin.writing.map((w, i) => (
-                        <li key={i}>
-                          <a href={w.url} target="_blank" rel="noopener noreferrer">{w.title}</a>
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                )}
-
-                <section className="pin-section">
-                  <h3 className="pin-section-title">questions i have</h3>
-                  <ul className="pin-list questions">
-                    {selectedPin.questions?.map((q, i) => (
-                      <li key={i}>{q}</li>
-                    ))}
-                  </ul>
-                </section>
-
-                <section className="pin-section">
-                  <h3 className="pin-section-title">things i've read</h3>
-                  <ul className="pin-list">
-                    {selectedPin.read?.map((r, i) => (
-                      <li key={i}><em>{r.title}</em> — {r.author}</li>
-                    ))}
-                  </ul>
-                </section>
-
-                <section className="pin-section">
-                  <h3 className="pin-section-title">things i want to read</h3>
-                  <ul className="pin-list">
-                    {selectedPin.toRead?.map((r, i) => (
-                      <li key={i}><em>{r.title}</em> — {r.author}</li>
-                    ))}
-                  </ul>
-                </section>
-              </div>
-
-              {selectedPin.music && selectedPin.music.title && (
-                <div className="pin-music-player">
-                  {selectedPin.music.url && (
-                    <audio
-                      ref={audioRef}
-                      src={selectedPin.music.url}
-                      onEnded={() => setIsPlaying(false)}
-                    />
-                  )}
-                  <div className="music-cover">
-                    {selectedPin.music.cover ? (
-                      <img
-                        src={selectedPin.music.cover}
-                        alt="Album cover"
-                        className="music-cover-img"
-                      />
-                    ) : (
-                      <div className="music-cover-placeholder">♫</div>
-                    )}
-                  </div>
-                  <div className="music-info">
-                    <span className="music-title">{selectedPin.music.title}</span>
-                    <span className="music-artist">{selectedPin.music.artist}</span>
-                  </div>
-                  <div className="music-controls">
-                    {selectedPin.music.url ? (
-                      <button className="music-btn" onClick={togglePlay}>
-                        {isPlaying ? '⏸' : '▶'}
-                      </button>
-                    ) : (
-                      <button className="music-btn" disabled style={{ opacity: 0.3 }}>▶</button>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
         {/* Terminal box - always in DOM to prevent layout shift */}
-        <div className="terminal-box" style={{ visibility: showTerminal ? 'visible' : 'hidden' }}>
-          <span className="terminal-prompt">&gt;</span>
-          <span className="terminal-text">{displayedText}<span className="terminal-cursor" /></span>
-        </div>
+        <StoryTerminal key={story.id} text={story.text} visible={showTerminal} reducedMotion={reducedMotion} />
 
         {isExplore && (
-          <div className="map-legend">
-            <div className="legend-item"><span className="legend-dot visited" /><span className="legend-label">visited</span></div>
-            <div className="legend-item"><span className="legend-dot clickable" /><span className="legend-label">click me</span></div>
+          <div className="map-explore-footer">
+            <div className="map-legend">
+              <div className="legend-item"><span className="legend-dot visited" /><span className="legend-label">visited</span></div>
+              <div className="legend-item"><span className="legend-dot clickable" /><span className="legend-label">ideas</span></div>
+            </div>
+            {pinsStatus !== 'ready' && <p className="map-data-status" role="status">{pinsStatus === 'loading' ? 'locating ideas…' : 'The map’s notes are unavailable. Try refreshing in a moment.'}</p>}
           </div>
         )}
 
-        {isStart && (
-          <div className="scroll-indicator"><div className="scroll-arrow" /></div>
-        )}
+        <nav className="story-route" aria-label="My story — choose a stop">
+          <span className="story-route-hint">{isExplore ? '' : animationPhase === 'animating' ? '…' : 'scroll ↓'}</span>
+          <div className="story-route-stops">
+            {STORY_SECTIONS.map((section, index) => (
+              <button type="button" key={section.id} className={`${index === currentSection ? 'active' : ''} ${index < currentSection ? 'passed' : ''} ${section.id === 'explore' ? 'final-stop' : ''}`}
+                aria-current={index === currentSection ? 'step' : undefined} aria-label={index === 5 ? 'Go directly to the full map' : `Go to ${ROUTE_STOPS[index]}`}
+                onClick={() => goTo(index)}>
+                <span className="route-dot" /><span className="route-label">{ROUTE_STOPS[index]}{index === 5 ? ' ↗' : ''}</span>
+              </button>
+            ))}
+          </div>
+          <div className="story-step-buttons">
+            <button type="button" aria-label="Previous chapter" disabled={isStart || animationPhase === 'animating'} onClick={() => goTo(currentSection - 1)}>←</button>
+            <span>{String(currentSection + 1).padStart(2, '0')} / 06</span>
+            <button type="button" aria-label="Next chapter" disabled={isExplore || animationPhase === 'animating'} onClick={() => goTo(currentSection + 1)}>→</button>
+          </div>
+        </nav>
       </div>
+      {selectedPin && <PinPage pin={selectedPin} onClose={closePin} />}
     </div>
   )
 }

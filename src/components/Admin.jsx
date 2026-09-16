@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase, fetchPins, updateAllPins, signIn, signOut } from '../lib/supabase'
+import NewsAdmin from './NewsAdmin'
 
 function Admin() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -12,14 +13,20 @@ function Admin() {
   const [selectedPin, setSelectedPin] = useState(null)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [mode, setMode] = useState('news')
+  const [localToken, setLocalToken] = useState('')
+  const [localEntry, setLocalEntry] = useState('')
   const navigate = useNavigate()
 
-  // Simple approach: always require fresh login (no session persistence)
   useEffect(() => {
-    // Sign out any existing session on mount to ensure clean state
-    supabase.auth.signOut().then(() => {
-      setIsLoading(false)
-    })
+    if (!supabase) { setIsLoading(false); return }
+    let active = true
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (active) { setIsLoggedIn(!!data.session); setIsLoading(false) }
+      if (data.session) { const rows = await fetchPins(); if (active && rows) setPins(rows) }
+    }).catch(() => { if (active) setIsLoading(false) })
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => { if (active) setIsLoggedIn(!!session) })
+    return () => { active = false; listener.subscription.unsubscribe() }
   }, [])
 
   const handleLogin = async (e) => {
@@ -58,7 +65,6 @@ function Admin() {
 
   const updatePinField = (pinId, field, value) => {
     setPins(pins.map(p => p.id === pinId ? { ...p, [field]: value } : p))
-    // Update selectedPin to reflect changes immediately
     if (selectedPin?.id === pinId) {
       setSelectedPin(prev => ({ ...prev, [field]: value }))
     }
@@ -98,7 +104,6 @@ function Admin() {
     }))
   }
 
-  // Show loading state
   if (isLoading) {
     return (
       <div className="admin-login">
@@ -109,8 +114,7 @@ function Admin() {
     )
   }
 
-  // Show login form
-  if (!isLoggedIn) {
+  if (!isLoggedIn && !localToken) {
     return (
       <div className="admin-login">
         <form onSubmit={handleLogin} className="admin-login-form">
@@ -129,6 +133,7 @@ function Admin() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button type="submit">login</button>
+          {(import.meta.env.DEV || import.meta.env.VITE_NEWS_LOCAL_DESK === 'true') && <details open={import.meta.env.VITE_NEWS_LOCAL_DESK === 'true'}><summary>local news desk</summary><input type="password" placeholder="desk key from .local/news-access.txt" aria-label="Local admin token" value={localEntry} onChange={e => setLocalEntry(e.target.value)} /><button type="button" onClick={() => { setLocalToken(localEntry); setLocalEntry('') }}>open local desk</button></details>}
           <button type="button" className="admin-back" onClick={() => navigate('/')}>
             ← back to site
           </button>
@@ -137,7 +142,6 @@ function Admin() {
     )
   }
 
-  // Get the current version of selectedPin from pins array
   const currentPin = selectedPin ? pins.find(p => p.id === selectedPin.id) : null
 
   return (
@@ -146,14 +150,15 @@ function Admin() {
         <h1>admin panel</h1>
         <div className="admin-actions">
           {error && <span className="admin-error">{error}</span>}
-          <button onClick={handleSave} className={saved ? 'saved' : ''} disabled={saving}>
+          {mode === 'portfolio' && <button onClick={handleSave} className={saved ? 'saved' : ''} disabled={saving}>
             {saving ? 'saving...' : saved ? '✓ saved' : 'save changes'}
-          </button>
-          <button onClick={handleLogout} className="logout">logout</button>
+          </button>}
+          <button onClick={() => { setLocalToken(''); handleLogout() }} className="logout">logout</button>
         </div>
       </div>
 
-      <div className="admin-content">
+      <nav className="admin-mode" aria-label="Admin area"><button aria-pressed={mode === 'news'} onClick={() => setMode('news')}>news</button><button disabled={!!localToken} aria-pressed={mode === 'portfolio'} onClick={() => setMode('portfolio')}>portfolio</button></nav>
+      {mode === 'news' ? <NewsAdmin localToken={localToken} /> : <div className="admin-content">
         <div className="admin-sidebar">
           <h3>regions</h3>
           {pins.map(pin => (
@@ -318,7 +323,7 @@ function Admin() {
             </div>
           )}
         </div>
-      </div>
+      </div>}
     </div>
   )
 }

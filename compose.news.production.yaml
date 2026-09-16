@@ -1,0 +1,33 @@
+# Apply only on the approved always-on host, after configuring its DNS name.
+services:
+  desk:
+    build:
+      args:
+        VITE_NEWS_LOCAL_DESK: "false"
+    environment:
+      NEWS_LOCAL_DESK: "false"
+      NEWS_LOCAL_ADMIN_TOKEN: ""
+      # Start with background work paused. Enable after migration/auth checks.
+      NEWS_WORKER_ENABLED: ${NEWS_WORKER_ENABLED:-false}
+      NEWS_OWNER_ID: ${NEWS_OWNER_ID:?Set the exact Supabase Auth owner UUID}
+      VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:?Set your existing public Supabase URL}
+      VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:?Set your existing public Supabase key}
+      NEWS_WEB_ORIGIN: ${NEWS_WEB_ORIGIN:?Set the public portfolio origin}
+    networks: [outbound, database, agent, web]
+  https:
+    image: caddy:2-alpine
+    environment:
+      NEWS_BACKEND_DOMAIN: ${NEWS_BACKEND_DOMAIN:?Set the approved backend DNS name}
+    volumes:
+      - ./config/Caddyfile.news:/etc/caddy/Caddyfile:ro
+      - news-tls:/data
+      - news-caddy:/config
+    ports: ["80:80", "443:443"]
+    networks: [web, outbound]
+    depends_on: [desk]
+    restart: unless-stopped
+networks:
+  web: {internal: true}
+volumes:
+  news-tls: {}
+  news-caddy: {}

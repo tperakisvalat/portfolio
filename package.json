@@ -5,21 +5,55 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "news:init": "node --env-file-if-exists=.env.local --import tsx server/cli.ts init",
+    "news:dev": "node --env-file-if-exists=.env.local --env-file-if-exists=.env.news.local --env-file-if-exists=.local/news.generated.env --import tsx server/cli.ts serve",
+    "news:token": "node --env-file-if-exists=.env.local --import tsx server/cli.ts token",
+    "news:setup": "node scripts/news-setup.mjs setup",
+    "news:start": "node scripts/news-setup.mjs start",
+    "news:stop": "node scripts/news-setup.mjs stop",
+    "news:logs": "node scripts/news-setup.mjs logs",
+    "news:doctor": "node scripts/news-setup.mjs doctor",
+    "news:verify": "node scripts/news-setup.mjs verify",
+    "news:prices": "node scripts/news-setup.mjs prices",
+    "news:backup": "node scripts/news-setup.mjs backup",
+    "news:production": "node scripts/news-setup.mjs production",
+    "news:check": "tsc -p tsconfig.server.json && node scripts/check-news-ui.mjs",
+    "news:test": "node --import tsx --test tests/news.test.ts tests/news-visuals.test.ts tests/news-figure-render.test.mjs tests/news-publishing-ui.test.mjs tests/codex-wire.test.ts tests/news-proxy.test.ts tests/news-doctor.test.ts tests/news-executor-client.test.ts tests/news-setup-files.test.mjs tests/news-seed.test.ts",
+    "news:preflight": "npm run news:check && npm run news:test && npm run news:test:postgres && npm run news:test:production && npm run build",
+    "news:test:postgres": "node scripts/news-postgres-test.mjs",
+    "news:test:restore": "node --import tsx scripts/news-restore-test.mjs",
+    "news:test:production": "node scripts/news-production-check.mjs",
+    "news:test:container": "node scripts/news-container-test.mjs",
+    "news:sources": "node --import tsx scripts/news-source-check.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "@fastify/static": "10.1.3",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "@openai/codex-sdk": "0.153.4",
     "@supabase/supabase-js": "^2.89.0",
     "dotted-map": "^2.2.3",
+    "fast-xml-parser": "5.11.1",
+    "fastify": "5.12.3",
+    "postgres": "3.4.9",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "react-router-dom": "^7.11.0"
+    "react-router-dom": "^7.11.0",
+    "zod": "4.5.4"
   },
   "devDependencies": {
+    "@types/node": "24.3.0",
     "@vitejs/plugin-react": "^5.1.2",
-    "vite": "^7.3.0"
+    "jsdom": "^30.0.1",
+    "supabase": "2.117.0",
+    "tsx": "4.23.13",
+    "typescript": "7.0.2",
+    "vite": "^7.3.0",
+    "yaml": "2.9.0"
   }
 }

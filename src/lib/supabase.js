@@ -3,10 +3,11 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null
 
 // Fetch all pins from database
 export async function fetchPins() {
+  if (!supabase) return null
   const { data, error } = await supabase
     .from('pins')
     .select('*')
@@ -35,6 +36,7 @@ export async function fetchPins() {
 
 // Update a single pin
 export async function updatePin(pin) {
+  if (!supabase) return false
   const { error } = await supabase
     .from('pins')
     .update({
@@ -66,6 +68,7 @@ export async function updateAllPins(pins) {
 
 // Auth helpers
 export async function signIn(email, password) {
+  if (!supabase) return { success:false, error:'Use the local news desk key below. Portfolio authentication is not configured here.' }
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password
@@ -78,11 +81,13 @@ export async function signIn(email, password) {
 }
 
 export async function signOut() {
+  if (!supabase) return true
   const { error } = await supabase.auth.signOut()
   return !error
 }
 
 export async function getSession() {
+  if (!supabase) return null
   const { data: { session } } = await supabase.auth.getSession()
   return session
 }

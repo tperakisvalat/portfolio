@@ -1,0 +1,895 @@
+[
+  {
+    "id": "gdelt",
+    "name": "GDELT",
+    "family": "news",
+    "recommendation": "start",
+    "homepage": "https://gdeltproject.org/data.html",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "macro",
+      "politics",
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Broad multilingual discovery across all pillars. Use bounded DOC queries by date, region and topic, not a full database dump. The official project describes its data as free and open. Originating articles retain their own rights. A live test was rate-limited; use backoff and independent feed coverage. [Data access](https://gdeltproject.org/data.html), [DOC API](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/).",
+    "rightsUrl": null,
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "al-jazeera-english",
+    "name": "Al Jazeera English",
+    "family": "news",
+    "recommendation": "start",
+    "homepage": "https://www.aljazeera.com/xml/rss/all.xml",
+    "endpoint": "https://www.aljazeera.com/xml/rss/all.xml",
+    "adapter": "feed",
+    "pillars": [
+      "politics"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Global factual reporting, especially Middle East and non-US events. Public RSS: 25 items in the earlier check. Corroborate consequential conflict claims and retain publisher identity. Feed access does not clear unrestricted full-text/AI use. [RSS endpoint](https://www.aljazeera.com/xml/rss/all.xml).",
+    "rightsUrl": null,
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "rest-of-world",
+    "name": "Rest of World",
+    "family": "news",
+    "recommendation": "start",
+    "homepage": "https://restofworld.org/platforms/",
+    "endpoint": "https://restofworld.org/feed/latest/",
+    "adapter": "feed",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Business and technology outside the West. Its official directory advertises the latest feed; live check returned 12 items, newest September 4. Use for regional reporting, not as an article mirror. [Feed directory](https://restofworld.org/platforms/), [latest feed](https://restofworld.org/feed/latest/), [licensing](https://restofworld.org/about/licensing-style-guidelines/).",
+    "rightsUrl": "https://restofworld.org/about/licensing-style-guidelines/",
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "techcabal",
+    "name": "TechCabal",
+    "family": "news",
+    "recommendation": "start",
+    "homepage": "https://techcabal.com/",
+    "endpoint": "https://techcabal.com/feed/",
+    "adapter": "feed",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "African business, fintech, infrastructure and technology. Public feed returned 10 items, newest September 7. Exclude or label sponsored pieces and press-release material. Rights for article-body processing remain a separate check. [Publisher](https://techcabal.com/), [feed](https://techcabal.com/feed/).",
+    "rightsUrl": null,
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "chinatalk",
+    "name": "ChinaTalk",
+    "family": "opinion",
+    "recommendation": "start",
+    "homepage": "https://www.chinatalk.media/about",
+    "endpoint": "https://www.chinatalk.media/feed",
+    "adapter": "feed",
+    "pillars": [
+      "politics",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Jordan Schneider and contributors; China, industrial capacity, technology and statecraft. Feed previously returned 20 items. Preserve interview/translation labels and links to original documents. [About](https://www.chinatalk.media/about), [feed](https://www.chinatalk.media/feed).",
+    "rightsUrl": null,
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "chartbook",
+    "name": "Chartbook",
+    "family": "opinion",
+    "recommendation": "start",
+    "homepage": "https://adamtooze.substack.com/about",
+    "endpoint": "https://adamtooze.substack.com/feed",
+    "adapter": "feed",
+    "pillars": [
+      "macro",
+      "politics"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Adam Tooze; political economy and historical context. Feed previously returned 20 items. Preserve attribution and distinguish public material from paid previews. [About](https://adamtooze.substack.com/about), [feed](https://adamtooze.substack.com/feed).",
+    "rightsUrl": null,
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "noahpinion",
+    "name": "Noahpinion",
+    "family": "opinion",
+    "recommendation": "start",
+    "homepage": "https://www.noahpinion.blog/about",
+    "endpoint": "https://www.noahpinion.blog/feed",
+    "adapter": "feed",
+    "pillars": [
+      "macro",
+      "politics"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Noah Smith; development, industrial policy and economic arguments. Feed previously returned 20 items. Use public material and underlying evidence; a paid-post preview is not the whole article. [About](https://www.noahpinion.blog/about), [feed](https://www.noahpinion.blog/feed).",
+    "rightsUrl": null,
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "anticipating-the-unintended",
+    "name": "Anticipating the Unintended",
+    "family": "opinion",
+    "recommendation": "start",
+    "homepage": "https://publicpolicy.substack.com/about",
+    "endpoint": "https://publicpolicy.substack.com/feed",
+    "adapter": "feed",
+    "pillars": [
+      "macro",
+      "politics"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Pranay Kotasthane and RSJ; India and public-policy mechanisms. Feed returned 20 items, newest September 7. Adds regional and conceptual range without another general US commentary source. [About](https://publicpolicy.substack.com/about), [feed](https://publicpolicy.substack.com/feed).",
+    "rightsUrl": null,
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "pekingnology",
+    "name": "Pekingnology",
+    "family": "opinion",
+    "recommendation": "start",
+    "homepage": "https://www.pekingnology.com/about",
+    "endpoint": "https://www.pekingnology.com/feed",
+    "adapter": "feed",
+    "pillars": [
+      "politics"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Zichen Wang; Chinese arguments and translations. Feed returned 20 items, newest September 6. Keep the original Chinese link and disclosed affiliation/translation method. Translation and opinion are not independent confirmation. [About](https://www.pekingnology.com/about), [feed](https://www.pekingnology.com/feed).",
+    "rightsUrl": null,
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "construction-physics",
+    "name": "Construction Physics",
+    "family": "opinion",
+    "recommendation": "start",
+    "homepage": "https://www.construction-physics.com/about",
+    "endpoint": "https://www.construction-physics.com/feed",
+    "adapter": "feed",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Brian Potter; manufacturing, building, engineering and productivity. The feed previously returned 20 items. Valuable for understanding physical technologies and the constraints on deploying them. [About](https://www.construction-physics.com/about), [feed](https://www.construction-physics.com/feed).",
+    "rightsUrl": null,
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "works-in-progress",
+    "name": "Works in Progress",
+    "family": "opinion",
+    "recommendation": "start",
+    "homepage": "https://worksinprogress.co/about/",
+    "endpoint": "https://www.worksinprogress.news/feed",
+    "adapter": "feed",
+    "pillars": [
+      "macro",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Cities, energy, medical progress, growth and engineering. Newsletter feed returned 20 items, newest September 2. Tag as analysis/opinion rather than original research, consistent with its ethics statement. [About](https://worksinprogress.co/about/), [feed](https://www.worksinprogress.news/feed), [ethics statement](https://worksinprogress.co/wip-image/uploads/2022/12/WIP_StatementofEthics_July2022.pdf).",
+    "rightsUrl": "https://worksinprogress.co/wip-image/uploads/2022/12/WIP_StatementofEthics_July2022.pdf",
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "one-useful-thing",
+    "name": "One Useful Thing",
+    "family": "opinion",
+    "recommendation": "start",
+    "homepage": "https://www.oneusefulthing.org/about",
+    "endpoint": "https://www.oneusefulthing.org/feed",
+    "adapter": "feed",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Ethan Mollick; practical AI adoption and evidence-informed work experiments. Feed previously returned 20 items. Prioritize measured usage and limitations, not each model announcement. [About](https://www.oneusefulthing.org/about), [feed](https://www.oneusefulthing.org/feed).",
+    "rightsUrl": null,
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "interconnects",
+    "name": "Interconnects",
+    "family": "opinion",
+    "recommendation": "start",
+    "homepage": "https://www.interconnects.ai/about",
+    "endpoint": "https://www.interconnects.ai/feed",
+    "adapter": "feed",
+    "pillars": [
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Nathan Lambert; technical AI methods and open-model economics. Feed returned 20 items, but newest observed entry was August 17. Check cadence before relying on it as current. Paid content exists; RSS body fields do not prove full access. [About](https://www.interconnects.ai/about), [feed](https://www.interconnects.ai/feed).",
+    "rightsUrl": null,
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "african-arguments",
+    "name": "African Arguments",
+    "family": "opinion",
+    "recommendation": "start",
+    "homepage": "https://africanarguments.org/about-african-arguments/",
+    "endpoint": "https://africanarguments.org/feed/",
+    "adapter": "feed",
+    "pillars": [
+      "politics"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "African political and economic analysis, with regional authorship. Feed returned 10 items, newest September 7. The site states CC BY-NC-SA 4.0: attribution, noncommercial use and share-alike implications require handling, including for adaptations. [About and license](https://africanarguments.org/about-african-arguments/), [feed](https://africanarguments.org/feed/).",
+    "rightsUrl": "https://africanarguments.org/about-african-arguments/",
+    "cadenceMinutes": 180
+  },
+  {
+    "id": "arxiv",
+    "name": "arXiv",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://export.arxiv.org/api/query",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Filtered queries: robotics cs.RO; AI/evaluation cs.AI and cs.LG; materials cond-mat.mtrl-sci; selected engineering terms. Robotics query returned valid Atom. Descriptive metadata including abstracts is CC0; papers have individual licenses. One request per three seconds, one connection. Label preprints and preserve versions. [API](https://export.arxiv.org/api/query), [manual](https://info.arxiv.org/help/api/user-manual.html), [terms](https://info.arxiv.org/help/api/tou.html).",
+    "rightsUrl": "https://info.arxiv.org/help/api/tou.html",
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "metr",
+    "name": "METR",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://metr.org/research/",
+    "endpoint": "https://metr.org/feed.xml",
+    "adapter": "feed",
+    "pillars": [
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Evaluations and developer-productivity research. Official RSS returned a parsed item; the feed is large, so limit/stream ingestion. Filter organizational announcements: the latest observed entry was a security update. Public pages are not blanket reuse permission. [Research](https://metr.org/research/), [feed](https://metr.org/feed.xml).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "epoch-ai",
+    "name": "Epoch AI",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://epoch.ai/latest",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Capabilities, compute costs, scaling and economic effects. Read the dated /latest index; no feed verified. The publisher permits reuse with attribution, subject to individual asset conditions. Filter events and staff news. [Latest](https://epoch.ai/latest), [reuse statement](https://epoch.ai/about/press).",
+    "rightsUrl": "https://epoch.ai/about/press",
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "pubmed-pmc-oa",
+    "name": "PubMed + PMC OA",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://eutilities.github.io/site/API_Key/usageandkey/",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Biotech, therapeutics, synthetic biology and clinical translation. Discover with E-utilities; retrieve eligible full text only through PMC's approved services. No key at low rate; optional free key for higher throughput. OA-subset licenses vary. [API guidance](https://eutilities.github.io/site/API_Key/usageandkey/), [approved full-text access](https://pmc.ncbi.nlm.nih.gov/tools/openftlist/).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "iea",
+    "name": "IEA",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://www.iea.org/analysis?type=report",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "macro",
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Electricity, grids, storage, minerals and industrial investment. Use the report-filtered analysis index and selected chapters/PDFs. Much written research is CC BY 4.0, but oil-market reports, datasets and some joint works are exceptions. [Report index](https://www.iea.org/analysis?type=report), [terms](https://www.iea.org/terms).",
+    "rightsUrl": "https://www.iea.org/terms",
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "cset-georgetown",
+    "name": "CSET, Georgetown",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://cset.georgetown.edu/publications/",
+    "endpoint": "https://cset.georgetown.edu/publications/feed/",
+    "adapter": "feed",
+    "pillars": [
+      "politics",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Hardware, supply chains, workforce, biotech and technology-statecraft. Publications-only feed returned 10 items, newest September 2. Prefer that feed to the noisy general homepage. Label institutional analysis and separately label translations. Check per-report rights. [Publications](https://cset.georgetown.edu/publications/), [feed](https://cset.georgetown.edu/publications/feed/).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "sec-edgar",
+    "name": "SEC EDGAR",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://www.sec.gov/search-filings/edgar-application-programming-interfaces",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Company watchlist: 10-K, 10-Q, 8-K, plus 20-F/6-K for foreign issuers. JSON submissions and XBRL company facts need no key; fetch server-side with compliant identification and rates. Follow accession documents for narrative. Company disclosures are primary claims, not independent reporting. [API specification and URL patterns](https://www.sec.gov/search-filings/edgar-application-programming-interfaces).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "oecd",
+    "name": "OECD",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://www.oecd.org/en/publications.html",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "macro",
+      "business"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Productivity, competition, enterprise dynamics, skills and digital adoption. Filter by series/topic in the publications index; no stable publications API was established. Much written content issued since July 2024 is CC BY 4.0, with exceptions. [Publications](https://www.oecd.org/en/publications.html), [open-access policy](https://www.oecd.org/en/about/oecd-open-by-default-policy.html).",
+    "rightsUrl": "https://www.oecd.org/en/about/oecd-open-by-default-policy.html",
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "world-bank-documents-reports",
+    "name": "World Bank Documents & Reports",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://documents.worldbank.org/en/publication/documents-reports/api",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "macro",
+      "business"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Firms, trade, development mechanisms, urbanization and country research. v3 documents API returned JSON for a productivity query. Filter document types to exclude procurement and project administration. Read per-document license and original publication date. [API documentation](https://documents.worldbank.org/en/publication/documents-reports/api), [API endpoint](https://search.worldbank.org/api/v3/wds).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "carnegie-endowment",
+    "name": "Carnegie Endowment",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://carnegieendowment.org/collections/featured-research",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "politics"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Regional institutional analysis across China, India, Europe and Africa. Its featured-research collection exposes papers, authors and dates. No official feed was found there; use an approved index adapter after robots/terms review. Avoid ingesting all commentary as \"research\". [Research collection](https://carnegieendowment.org/collections/featured-research).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "merics",
+    "name": "MERICS",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://merics.org/en/analysis",
+    "endpoint": "https://merics.org/en/rss",
+    "adapter": "feed",
+    "pillars": [
+      "politics",
+      "business"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "China's institutions, industry, technology and EU relations. Official feed returned 20 entries. Reconcile feed dates against article pages; a one-day discrepancy was observed. Exclude members-only products until licensed. [Analysis catalogue](https://merics.org/en/analysis), [feed](https://merics.org/en/rss).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "eprs",
+    "name": "EPRS",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://www.europarl.europa.eu/thinktank/en/",
+    "endpoint": "https://epthinktank.eu/feed/",
+    "adapter": "feed",
+    "pillars": [
+      "politics"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "EU legislation, institutional mechanics, trade and regulation. Use the Think Tank index or its officially advertised blog feed. The feed was discovered but not endpoint-tested. Distinguish research-service analysis from Parliament's official position. [Index](https://www.europarl.europa.eu/thinktank/en/), [feed](https://epthinktank.eu/feed/), [legal notice](https://www.europarl.europa.eu/legal-notice/en).",
+    "rightsUrl": "https://www.europarl.europa.eu/legal-notice/en",
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "crs-congress-gov",
+    "name": "CRS / Congress.gov",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://github.com/libraryofcongress/api.congress.gov",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "politics"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "US legislative and institutional explanations, sanctions and policy changes. Congress API includes /v3/crsreport and report-specific versions. A free API key is needed; no authenticated test yet. Do not present a minor report update as a new event. [Official API and documentation](https://github.com/libraryofcongress/api.congress.gov).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "bis",
+    "name": "BIS",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://www.bis.org/rss",
+    "endpoint": "https://www.bis.org/doclist/bis_fsi_publs.rss",
+    "adapter": "feed",
+    "pillars": [
+      "macro"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Working papers and quarterly research. Earlier feed check returned 20 RDF/RSS items. Choose exact collections from the catalogue; the tested FSI feed is not the entire BIS research universe. Check rights per document. [Feed catalogue](https://www.bis.org/rss), [tested feed](https://www.bis.org/doclist/bis_fsi_publs.rss).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "federal-reserve",
+    "name": "Federal Reserve",
+    "family": "research",
+    "recommendation": "start",
+    "homepage": "https://www.federalreserve.gov/feeds/feeds.htm",
+    "endpoint": "https://www.federalreserve.gov/feeds/working_papers.xml",
+    "adapter": "feed",
+    "pillars": [
+      "macro"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Working papers on monetary transmission, labor, firms and financial conditions. Earlier test returned 15 items. Keep staff research separate from official policy decisions; a paper is not a Board endorsement. [Feed catalogue](https://www.federalreserve.gov/feeds/feeds.htm), [working papers](https://www.federalreserve.gov/feeds/working_papers.xml).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "openreview",
+    "name": "OpenReview",
+    "family": "research",
+    "recommendation": "reserve",
+    "homepage": "https://docs.openreview.net/how-to-guides/data-retrieval-and-modification/how-to-get-all-notes-for-submissions-reviews-rebuttals-etc",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Accepted papers and public reviews at selected venues. API v2 has permission-dependent notes and distinct public/acceptance/modification dates. Public sample returned 403; no bypass. Recheck legitimate access in deployment before activation. [Retrieval guide](https://docs.openreview.net/how-to-guides/data-retrieval-and-modification/how-to-get-all-notes-for-submissions-reviews-rebuttals-etc).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "openalex",
+    "name": "OpenAlex",
+    "family": "research",
+    "recommendation": "reserve",
+    "homepage": "https://help.openalex.org/access/pricing/",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "DOI deduplication, author/institution enrichment and open-location discovery, not a second research firehose. Keyless sample returned JSON. August 2026 docs give a free key $1/day of API usage; metadata CC0 does not license linked papers. [Pricing](https://help.openalex.org/access/pricing/), [authentication](https://help.openalex.org/api/authentication/).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "semantic-scholar",
+    "name": "Semantic Scholar",
+    "family": "research",
+    "recommendation": "reserve",
+    "homepage": "https://www.semanticscholar.org/faq/public-api",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Citation enrichment if needed. Some endpoints need a key; confirm the governing product agreement because official API/dataset license pages differ in scope. Do not build a second overlapping enrichment layer at launch. [API](https://www.semanticscholar.org/faq/public-api), [API license](https://www.semanticscholar.org/product/api/license), [dataset/API agreement](https://api.semanticscholar.org/license/).",
+    "rightsUrl": "https://www.semanticscholar.org/product/api/license",
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "doe-osti",
+    "name": "DOE OSTI",
+    "family": "research",
+    "recommendation": "hold",
+    "homepage": "https://www.osti.gov/api/v1/docs",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Energy, materials and laboratory research. Documented records API supports dates, full-text availability and subject filters. Its FAQ specifically directs AI/ML/LLM projects to contact OSTI; clarify that before integration. [API docs](https://www.osti.gov/api/v1/docs), [FAQ](https://www.osti.gov/faqs).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "nber",
+    "name": "NBER",
+    "family": "research",
+    "recommendation": "reserve",
+    "homepage": "https://www.nber.org/papers",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Productivity, innovation, firms and entrepreneurship. Working-paper index/Digest for discovery; recent papers can be subscription-limited. Seek authorized author versions, never bypass allowances. Label working papers as not peer reviewed. [Papers](https://www.nber.org/papers), [access conditions](https://www.nber.org/subscribe/working-papers-subscriptions-and-access).",
+    "rightsUrl": "https://www.nber.org/subscribe/working-papers-subscriptions-and-access",
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "bank-of-england",
+    "name": "Bank of England",
+    "family": "research",
+    "recommendation": "reserve",
+    "homepage": "https://www.bankofengland.co.uk/rss",
+    "endpoint": "https://www.bankofengland.co.uk/rss/publications",
+    "adapter": "feed",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Staff research and financial stability. Earlier publication feed returned 50 items. Reserve connector for later expansion. [Catalogue](https://www.bankofengland.co.uk/rss), [feed](https://www.bankofengland.co.uk/rss/publications).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "sipri",
+    "name": "SIPRI",
+    "family": "research",
+    "recommendation": "reserve",
+    "homepage": "https://www.sipri.org/rss",
+    "endpoint": "https://www.sipri.org/rss/combined.xml",
+    "adapter": "feed",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Arms transfers, military spending and conflict research. Combined feed returned 10 items; latest was a summer-school announcement. Filter events and verify each database/report's reuse terms. [Feed directory](https://www.sipri.org/rss), [combined feed](https://www.sipri.org/rss/combined.xml).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "csis",
+    "name": "CSIS",
+    "family": "research",
+    "recommendation": "reserve",
+    "homepage": "https://www.csis.org/programs/critical-minerals-security-program",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Selected critical-minerals and industrial-security research. The narrow program index loaded; no feed found there. An index adapter and terms review are needed. Avoid event/transcript volume and label institutional perspective. [Critical Minerals program](https://www.csis.org/programs/critical-minerals-security-program).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "bruegel",
+    "name": "Bruegel",
+    "family": "research",
+    "recommendation": "hold",
+    "homepage": "https://www.bruegel.org/publications",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "EU competition, energy and industrial policy. Good thematic fit, but the publications index was blocked in this research; do not work around it. Needs legitimate connector/access and reuse confirmation. [Publications](https://www.bruegel.org/publications).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "americas-quarterly",
+    "name": "Americas Quarterly",
+    "family": "opinion",
+    "recommendation": "reserve",
+    "homepage": "https://www.americasquarterly.org/subscribe/",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Latin American politics and business. Official RSS parsed after tolerating leading whitespace, but newest item was October 2019. Use a current public index/newsletter adapter, not that feed. [Publication and subscriptions](https://www.americasquarterly.org/subscribe/).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "semafor",
+    "name": "Semafor",
+    "family": "opinion",
+    "recommendation": "reserve",
+    "homepage": "https://www.semafor.com/newsletters",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Global overview and regional editions for Africa, Gulf and China. Public newsletter directory verified; no stable feed/API established. An optional public-index connector, not a launch dependency. [Email briefings](https://www.semafor.com/newsletters).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "stratechery",
+    "name": "Stratechery",
+    "family": "opinion",
+    "recommendation": "reserve",
+    "homepage": "https://stratechery.com/topics/",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Ben Thompson; platforms, distribution and business strategy. Begin with free public articles, not a private subscriber feed. Personalized RSS credentials and subscription rights need separate handling. [Free article topics](https://stratechery.com/topics/), [RSS explanation](https://stratechery.com/2015/welcome-to-stratechery-3-0/).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "benedict-evans",
+    "name": "Benedict Evans",
+    "family": "opinion",
+    "recommendation": "reserve",
+    "homepage": "https://www.ben-evans.com/newsletter/",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Weekly technology/business synthesis. Official page describes a delayed free edition and paid premium edition; no public newsletter RSS confirmed. Public blog or approved email ingestion later. [Newsletter](https://www.ben-evans.com/newsletter/).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "gnews",
+    "name": "GNews",
+    "family": "news",
+    "recommendation": "reserve",
+    "homepage": "https://gnews.io/",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Optional paid news discovery. Free plan is delayed/development-oriented; current Essential is EUR49.99/month. Terms allow reasonable caching but impose data/IP conditions including deletion on termination. Confirm permanent selected-record retention before using it for an archive. [Plans](https://gnews.io/), [terms](https://gnews.io/legal/terms-of-service).",
+    "rightsUrl": "https://gnews.io/legal/terms-of-service",
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "newsdata-io",
+    "name": "NewsData.io",
+    "family": "news",
+    "recommendation": "reserve",
+    "homepage": "https://newsdata.io/blog/pricing-plan-in-newsdata-io/",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Free plan: official August 2026 article says 200 credits/day, 10 articles/credit, 12-hour delay and no full text, with commercial use permitted. Terms did not render readably, so storage/AI rights are unresolved. Not the only latest-news source. [Pricing explanation](https://newsdata.io/blog/pricing-plan-in-newsdata-io/).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "world-news-api",
+    "name": "World News API",
+    "family": "news",
+    "recommendation": "hold",
+    "homepage": "https://worldnewsapi.com/terms/",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Attractive top-news clustering; unsuitable as a persistent backbone under its public terms. Storage restrictions include derived data, with tightly limited permission-based caching. Written permission would be needed for this design. [Terms, March 2025](https://worldnewsapi.com/terms/), [pricing](https://worldnewsapi.com/pricing/).",
+    "rightsUrl": "https://worldnewsapi.com/terms/",
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "the-news-api",
+    "name": "The News API",
+    "family": "news",
+    "recommendation": "reserve",
+    "homepage": "https://www.thenewsapi.com/pricing",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Low-priced metadata discovery candidate. Pricing is clear, but published website terms do not clearly resolve API storage and processing rights for this use. Do not select solely on price. [Plans](https://www.thenewsapi.com/pricing), [terms](https://www.thenewsapi.com/tos).",
+    "rightsUrl": "https://www.thenewsapi.com/tos",
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "ap-and-reuters",
+    "name": "AP and Reuters",
+    "family": "news",
+    "recommendation": "reserve",
+    "homepage": "https://developer.ap.org/ap-media-api/",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "High-value wire reporting. AP Media API and Reuters Connect offer licensed delivery, not a verified free production feed. Obtain appropriate rights or use genuinely permitted discovery and original links; do not assume an aggregator transfers publisher rights. [AP API](https://developer.ap.org/ap-media-api/), [AP AI licensing](https://www.ap.org/who-we-serve/ai-tech-and-data/), [Reuters plans](https://www.reutersconnect.com/plans-and-pricing).",
+    "rightsUrl": "https://www.ap.org/who-we-serve/ai-tech-and-data/",
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "x",
+    "name": "X",
+    "family": "news",
+    "recommendation": "reserve",
+    "homepage": "https://docs.x.com/x-api/getting-started/pricing",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Useful for following specific authors and discovering original links. Not a core factual source and not a default scrape target. Use the official paid API only after a validated watchlist, budget and reuse review; manual URL submission works first. [Official API pricing](https://docs.x.com/x-api/getting-started/pricing).",
+    "rightsUrl": null,
+    "cadenceMinutes": 1440
+  },
+  {
+    "id": "kalshi",
+    "name": "Kalshi",
+    "family": "markets",
+    "recommendation": "hold",
+    "homepage": "https://docs.kalshi.com/getting_started/quick_start_market_data",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "macro",
+      "politics",
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Public display, AI use and deployment-network access require verification before activation. Numeric values must come from an authorized data connector, never the editor.",
+    "rightsUrl": "https://kalshi-public-docs.s3.amazonaws.com/kalshi-data-terms-of-service.pdf",
+    "cadenceMinutes": 15
+  },
+  {
+    "id": "polymarket",
+    "name": "Polymarket",
+    "family": "markets",
+    "recommendation": "hold",
+    "homepage": "https://docs.polymarket.com/market-data/discover-markets",
+    "endpoint": null,
+    "adapter": "pending",
+    "pillars": [
+      "macro",
+      "politics",
+      "business",
+      "tech"
+    ],
+    "enabled": false,
+    "processing": "metadata",
+    "rightsNote": "Public display, AI use and deployment-network access require verification before activation. Numeric values must come from an authorized data connector, never the editor.",
+    "rightsUrl": null,
+    "cadenceMinutes": 15
+  }
+]

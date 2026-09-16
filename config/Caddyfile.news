@@ -1,0 +1,9 @@
+{$NEWS_BACKEND_DOMAIN} {
+  @news path /api/news/* /news/brief.txt
+  handle @news {
+    reverse_proxy desk:8080
+  }
+  handle {
+    respond "Not found" 404
+  }
+}

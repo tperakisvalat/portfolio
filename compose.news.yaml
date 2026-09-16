@@ -1,0 +1,74 @@
+name: tpv-news
+services:
+  db:
+    image: postgres:17-bookworm
+    environment:
+      POSTGRES_DB: news
+      POSTGRES_USER: news
+      POSTGRES_PASSWORD: ${NEWS_DB_PASSWORD:?Run npm run news:setup}
+    volumes: [news-db:/var/lib/postgresql/data]
+    networks: [database]
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U news -d news"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  desk:
+    build:
+      context: .
+      dockerfile: Dockerfile.news
+      target: desk
+      args:
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:-}
+        VITE_NEWS_LOCAL_DESK: "true"
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      DATABASE_URL: postgres://news:${NEWS_DB_PASSWORD}@db:5432/news
+      NEWS_MANAGED_DB: local-compose
+      NEWS_LOCAL_DESK: "true"
+      NEWS_LOCAL_ADMIN_TOKEN: ${NEWS_LOCAL_ADMIN_TOKEN:?Run npm run news:setup}
+      NEWS_WEB_ORIGIN: http://127.0.0.1:8080
+      NEWS_WORKER_ENABLED: ${NEWS_WORKER_ENABLED:-true}
+      NEWS_EXECUTOR_URL: http://executor:8791
+      NEWS_EXECUTOR_TOKEN: ${NEWS_EXECUTOR_TOKEN:?Run npm run news:setup}
+      NEWS_PRICING_FILE: /app/pricing.json
+    volumes:
+      - ./.local/news-pricing.json:/app/pricing.json:ro
+    ports: ["127.0.0.1:8080:8080"]
+    networks: [outbound, database, agent]
+    depends_on:
+      db: {condition: service_healthy}
+      executor: {condition: service_started}
+    read_only: true
+    tmpfs:
+      - "/tmp:size=64m,mode=1777"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+    stop_grace_period: 60s
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:8080/api/news/v1/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  executor:
+    build: {context: ., dockerfile: Dockerfile.news, target: executor}
+    environment:
+      NEWS_EXECUTOR_TOKEN: ${NEWS_EXECUTOR_TOKEN:?Run npm run news:setup}
+    networks: [agent]
+    read_only: true
+    tmpfs:
+      - "/tmp:size=256m,mode=1777"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    mem_limit: 1g
+    restart: unless-stopped
+networks:
+  outbound: {}
+  database: {internal: true}
+  agent: {internal: true}
+volumes:
+  news-db: {}

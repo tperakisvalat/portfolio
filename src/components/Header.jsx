@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect, useRef } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 
 const CLOCKS = [
   { label: 'PARIS', timezone: 'Europe/Paris' },
@@ -9,15 +9,23 @@ const CLOCKS = [
 
 const NAV_LINKS = [
   { label: 'news', to: '/news', internal: true },
-  { label: '2026', url: 'https://docs.google.com/document/d/1tBCX9dw0gRl5RnJ1Jujtj04mgdBiQqJe89Dr-OsTynU/edit?tab=t.0' },
-  { label: 'updates', url: 'https://docs.google.com/document/d/1w6CIFAsuYbnXb_Xj_Mvr4cKZcjGndOvN9j_9TREBDgo/edit?usp=sharing' },
+  { label: 'personal', url: 'https://docs.google.com/document/d/1w6CIFAsuYbnXb_Xj_Mvr4cKZcjGndOvN9j_9TREBDgo/edit?usp=sharing' },
   { label: 'substack', url: 'https://substack.com/@timpv' },
   { label: 'linkedin', url: 'https://www.linkedin.com/in/timothee-perakis/' },
-  { label: 'x', url: 'https://x.com/tperakisvalat' },
 ]
 
 function Header() {
   const [time, setTime] = useState(new Date())
+  const location = useLocation()
+  const headerRef = useRef(null)
+
+  useEffect(() => {
+    const observer = new ResizeObserver(([entry]) => {
+      document.documentElement.style.setProperty('--header-height', `${entry.target.getBoundingClientRect().height}px`)
+    })
+    observer.observe(headerRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000)
@@ -35,9 +43,9 @@ function Header() {
   }
 
   return (
-    <header className="header">
+    <header className="header" ref={headerRef}>
       <div className="header-left">
-        <span className="name">tpv</span>
+        <Link to="/" className="name">tpv</Link>
         <div className="clocks">
           {CLOCKS.map(clock => (
             <div key={clock.timezone} className="clock">
@@ -48,15 +56,17 @@ function Header() {
         </div>
       </div>
 
-      <div className="header-right">
+      <nav className="header-right" aria-label="Main navigation">
         {NAV_LINKS.map(link => (
           link.internal ? (
             <Link
               key={link.label}
               to={link.to}
-              className="social-link"
+              className={`social-link news-link ${location.pathname.startsWith(link.to) ? 'active' : ''}`}
+              aria-current={location.pathname.startsWith(link.to) ? 'page' : undefined}
             >
-              {link.label}
+              <span className="news-link-signal" aria-hidden="true"><i /><i /><i /></span>
+              <span>{link.label}</span><span className="news-link-arrow" aria-hidden="true">↗</span>
             </Link>
           ) : (
             <a
@@ -70,7 +80,7 @@ function Header() {
             </a>
           )
         ))}
-      </div>
+      </nav>
     </header>
   )
 }
